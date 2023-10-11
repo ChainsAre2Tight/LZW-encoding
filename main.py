@@ -4,7 +4,9 @@ if __name__ == "__main__":
 
 # Вот это менять
 msg = "abcdabceab"
-dct = ["a", "b", "c", "d", "e"]
+
+dct = sorted(list(set(msg)))
+# dct = ["a", "b", "c", "d", "e"]
 # encoded_msg = "01235245"
 
 if __name__ == "__main__":
