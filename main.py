@@ -1,11 +1,21 @@
+if __name__ == "__main__":
+    from functions import cipher, decipher
+
+
+# Вот это менять
 msg = "abcdabceab"
 dct = ["a", "b", "c", "d", "e"]
+# encoded_msg = "01235245"
 
 if __name__ == "__main__":
-    from .functions import cypher, decypher
+    print("""
+--- Cipher ---
+        """)
+    encoded_msg = cipher(msg, True)
+    print(encoded_msg)
 
-if __name__ == "__main__":
-    print(cypher(msg))
+    print("""
+--- Decipher ---
+    """)
 
-    encoded_msg = "0123545"
-    # print(decypher(encoded_msg, dct))
+    print(decipher(encoded_msg, dct, True))
