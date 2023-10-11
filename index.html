@@ -65,8 +65,9 @@
                     omega = k;
                 }
                 i += 1;
+                let abc = asd.length - 1
                 if (debug) {
-                    addToDebugTable("cipherTable", k + " / " + omega + " / " + omega_k + " / " + printout);
+                    addToDebugTable("cipherTable", omega + " / " + printout + " / " + abc + ": " + omega_k);
                 }
             }
 
@@ -94,8 +95,10 @@
                 }
                 res += letter;
                 buffer = letter;
+                let abc = asd.length - 10
+                let cba = asd.length - 11
                 if (debug) {
-                    addToDebugTable("decipherTable", k + " / " + letter + " / " + polnaya_zapis + " / " + buffer + "?");
+                    addToDebugTable("decipherTable", k + " / " + letter + " / " + cba + ": " + polnaya_zapis + " / " + abc + ": " + buffer + "?");
                 }
                 flag = 1;
             }
