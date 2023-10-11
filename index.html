@@ -42,55 +42,49 @@
     let asd = [];
 
     function cipher(msg, debug = false) {
-        asd = [...new Set(msg)];
-        let i = 1;
-        let omega = msg[0];
-        let res = '';
-        let lox = "-"
+            asd = [...new Set(msg)];
+            let i = 1;
+            let omega = msg[0];
+            let res = '';
+            let printout = '-';
 
-        while (i <= msg.length) {
-            let k;
-            if (i < msg.length) {
-                k = msg[i];
-            }
-            let omega_k = omega + k;
-
-
-            if (asd.includes(omega_k)) {
-                omega = omega_k;
-                if (debug) {
-                    addToDebugTable("cipherTable", "-");
+            while (i <= msg.length) {
+                let k;
+                if (i < msg.length) {
+                    k = msg[i];
                 }
-            } else {
-                lox = asd.indexOf(omega).toString();
+                let omega_k = omega + k;
 
-
-                res += lox;
-                asd.push(omega_k);
-                omega = k;
+                if (omega_k in asd) {
+                    omega = omega_k;
+                } else {
+                    let lox = asd.indexOf(omega);
+                    printout = lox;
+                    res = res + " " + lox;
+                    asd.push(omega_k);
+                    omega = k;
+                }
+                i += 1;
+                if (debug) {
+                    addToDebugTable("cipherTable", k + " / " + omega + " / " + omega_k + " / " + printout);
+                }
             }
-            if (debug) {
-                addToDebugTable("cipherTable", k + " / " + omega + " / " + omega_k + " / " + lox);
-            }
-            lox = "-"
 
-            i += 1;
+            addToDebugTable("cipherTable", "Cipher Output: " + res);
+            return res;
         }
 
-        addToDebugTable("cipherTable", "Cipher Output: " + res);
-        return res;
-    }
-
     function decipher(msg, debug = false) {
+        let msgArray = msg.split(" "); // Split the input string by spaces
         let i = 0;
-        let k = parseInt(msg[0]);
-        let omega = msg[0];
+        let k = parseInt(msgArray[0]);
+        let omega = msgArray[0];
         let res = "";
         let flag = 0;
         let buffer = "";
         let polnaya_zapis = "-";
 
-        while (i < msg.length) {
+        while (i < msgArray.length) {
             if (k < asd.length) {
                 const letter = asd[k];
 
@@ -106,8 +100,8 @@
                 flag = 1;
             }
             i += 1;
-            if (i < msg.length) {
-                k = parseInt(msg[i]);
+            if (i < msgArray.length) {
+                k = parseInt(msgArray[i]);
             }
         }
 
