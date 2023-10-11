@@ -3,24 +3,23 @@ def cipher(msg: str, debug=False):
     i = 1
     omega = msg[0]
     res = ''
+    printout = '-'
     while i <= len(msg):
         if i < len(msg):
             k = msg[i]
         omega_k = str(omega + k)
-        if debug:
-            print(k, omega, omega_k, end="   ")
+
         if omega_k in asd:
             omega = omega_k
-            if debug:
-                print('-')
         else:
             lox = asd.index(omega)
-            if debug:
-                print(lox)
-            res = res + str(lox)
+            printout = lox
+            res = res + " " + str(lox)
             asd.append(omega_k)
             omega = k
         i += 1
+        if debug:
+            print(k, omega, omega_k, printout)
     return res
 
 
@@ -33,21 +32,18 @@ def decipher(msg: str, asd: list, debug=False) -> str:
     buffer = ""
 
     while i < len(msg):
+        polnaya_zapis = '-'
         k = int(msg[i])
         if k < len(asd):
 
             letter = asd[k]
-            if debug:
-                print(k, letter, end=" ")
             if flag != 0:
                 polnaya_zapis = str(buffer + letter)
-                if debug:
-                    print(polnaya_zapis, end=' ')
                 asd.append(polnaya_zapis)
             res = res + letter
             buffer = letter
             if debug:
-                print(buffer + "?")
+                print(k, letter, polnaya_zapis, buffer + "?")
             flag = 1
         i += 1
 

@@ -3,7 +3,7 @@ if __name__ == "__main__":
 
 
 # Вот это менять
-msg = "abcdabceab"
+msg = "студент седьмой учебной группы ботников дмитрий александрович"
 
 dct = sorted(list(set(msg)))
 # dct = ["a", "b", "c", "d", "e"]
@@ -20,4 +20,4 @@ if __name__ == "__main__":
 --- Decipher ---
     """)
 
-    print(decipher(encoded_msg, dct, True))
+    print(decipher(encoded_msg.split(), dct, True))
