@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cipher SPA</title>
+</head>
+<body style="background-color: black; color: white; font-family: sans-serif">
+<div style="display: flex; align-items: center; width: 100vw">
+    <div style="width: 30%; margin: auto; padding-top: 5%">
+        <h1>Cipher SPA</h1>
+        <label for="msgInput">Enter a value for 'msg':</label>
+        <input type="text" id="msgInput">
+        <button onclick="executeCipher()">Execute Cipher</button>
+
+        <table id="cipherTable" style="margin-top: 2%">
+            <thead>
+            <tr>
+                <th>Cipher Debug Output</th>
+            </tr>
+            </thead>
+            <tbody id="cipherTableBody">
+            </tbody>
+        </table>
+        <table id="decipherTable" style="margin-top: 2%">
+            <thead>
+            <tr>
+                <th>Decipher Debug Output</th>
+            </tr>
+            </thead>
+            <tbody id="decipherTableBody">
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    function addToDebugTable(tableId, output) {
+        const tableBody = document.getElementById(tableId + "Body");
+        const newRow = tableBody.insertRow(-1);
+        const cell = newRow.insertCell(0);
+        cell.innerText = output;
+    }
+
+    let asd = [];
+
+    function cipher(msg, debug = false) {
+        asd = [...new Set(msg)];
+        let i = 1;
+        let omega = msg[0];
+        let res = '';
+        let lox = "-"
+
+        while (i <= msg.length) {
+            let k;
+            if (i < msg.length) {
+                k = msg[i];
+            }
+            let omega_k = omega + k;
+
+
+            if (asd.includes(omega_k)) {
+                omega = omega_k;
+                if (debug) {
+                    addToDebugTable("cipherTable", "-");
+                }
+            } else {
+                lox = asd.indexOf(omega).toString();
+
+
+                res += lox;
+                asd.push(omega_k);
+                omega = k;
+            }
+            if (debug) {
+                addToDebugTable("cipherTable", k + " / " + omega + " / " + omega_k + " / " + lox);
+            }
+            lox = "-"
+
+            i += 1;
+        }
+
+        addToDebugTable("cipherTable", "Cipher Output: " + res);
+        return res;
+    }
+
+    function decipher(msg, debug = false) {
+        let i = 0;
+        let k = parseInt(msg[0]);
+        let omega = msg[0];
+        let res = "";
+        let flag = 0;
+        let buffer = "";
+        let polnaya_zapis = "-";
+
+        while (i < msg.length) {
+            if (k < asd.length) {
+                const letter = asd[k];
+
+                if (flag !== 0) {
+                    polnaya_zapis = buffer + letter;
+                    asd.push(polnaya_zapis);
+                }
+                res += letter;
+                buffer = letter;
+                if (debug) {
+                    addToDebugTable("decipherTable", k + " / " + letter + " / " + polnaya_zapis + " / " + buffer + "?");
+                }
+                flag = 1;
+            }
+            i += 1;
+            if (i < msg.length) {
+                k = parseInt(msg[i]);
+            }
+        }
+
+        addToDebugTable("decipherTable", "Decipher Output: " + res);
+    }
+
+    function executeCipher() {
+        const msg = document.getElementById("msgInput").value;
+        const cipherTableBody = document.getElementById("cipherTableBody");
+        cipherTableBody.innerHTML = "";
+
+        const decipherTableBody = document.getElementById("decipherTableBody");
+        decipherTableBody.innerHTML = "";
+
+        if (msg.length === 0) {
+            addToDebugTable("cipherTable", "Please enter a 'msg' value.");
+        } else {
+            const cipherResult = cipher(msg, true); // Set debug to true
+            decipher(cipherResult, true); // Decipher and set debug to true
+        }
+    }
+</script>
+</body>
+</html>
