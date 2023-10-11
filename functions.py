@@ -1,14 +1,10 @@
 def cipher(msg: str, debug=False):
     asd = sorted(list(set(msg)))
-    i = 0
+    i = 1
     omega = msg[0]
     res = ''
-    while i < len(msg):
-        i += 1
-        if i == len(msg):
-            # print(asd.index(omega))
-            pass
-        else:
+    while i <= len(msg):
+        if i < len(msg):
             k = msg[i]
         omega_k = str(omega + k)
         if debug:
@@ -24,6 +20,7 @@ def cipher(msg: str, debug=False):
             res = res + str(lox)
             asd.append(omega_k)
             omega = k
+        i += 1
     return res
 
 
