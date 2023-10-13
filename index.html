@@ -10,7 +10,6 @@
         <label for="msgInput">Enter a value for 'msg':</label>
         <input type="text" id="msgInput">
         <button onclick="executeCipher()">Execute Cipher</button>
-
         <table id="cipherTable" style="margin-top: 2%">
             <thead>
             <tr>
@@ -64,6 +63,7 @@
         const cell_dict_entry = newRow.insertCell(3);
         cell_dict_entry.innerText = dict_entry;
     }
+
     function addToDecipherTable(tableId, symbol_in, symbol_out, full_entry, partial_entry) {
         const tableBody = document.getElementById(tableId + "Body");
         const newRow = tableBody.insertRow(-1);
@@ -81,43 +81,43 @@
     let lox_asd = [];
 
     function cipher(msg, debug = false) {
-            asd = [...new Set(msg)];
-            lox_asd = asd.slice();
-            let i = 1;
-            let omega = msg[0];
-            let res = '';
-            let printout = '-';
-            let omega_out = '-';
-            for (const element of asd) {
-                addToCipherTable("cipherTable", element, " ", " ", " ")
-            }
-
-            while (i <= msg.length) {
-                let k = '-';
-                if (i < msg.length) {
-                    k = msg[i];
-                }
-                let omega_k = omega + k;
-                omega_out = omega;
-                if (asd.includes(omega_k)) {
-                    omega = omega_k;
-                } else {
-                    let lox = asd.indexOf(omega);
-                    printout = lox;
-                    res = res + " " + lox;
-                    asd.push(omega_k);
-                    omega = k;
-                }
-                i += 1;
-                let abc = asd.length - 1
-                if (debug) {
-                    addToCipherTable("cipherTable", omega_out, k, printout, abc + ": " + omega_k);
-                }
-            }
-
-            addToCipherTable("cipherTableOutput", "Cipher Output: ", res, "", "");
-            return res;
+        asd = [...new Set(msg)];
+        lox_asd = asd.slice();
+        let i = 1;
+        let omega = msg[0];
+        let res = '';
+        let printout = '-';
+        let omega_out = '-';
+        for (const element of asd) {
+            addToCipherTable("cipherTable", element, " ", " ", " ")
         }
+
+        while (i <= msg.length) {
+            let k = '-';
+            if (i < msg.length) {
+                k = msg[i];
+            }
+            let omega_k = omega + k;
+            omega_out = omega;
+            if (asd.includes(omega_k)) {
+                omega = omega_k;
+            } else {
+                let lox = asd.indexOf(omega);
+                printout = lox;
+                res = res + " " + lox;
+                asd.push(omega_k);
+                omega = k;
+            }
+            i += 1;
+            let abc = asd.length - 1
+            if (debug) {
+                addToCipherTable("cipherTable", omega_out, k, printout, abc + ": " + omega_k);
+            }
+        }
+
+        addToCipherTable("cipherTableOutput", "Cipher Output: ", res, "", "");
+        return res;
+    }
 
     function decipher(msg, debug = false) {
         let msgArray = msg.split(" "); // Split the input string by spaces
@@ -175,5 +175,11 @@
         }
     }
 </script>
+<style>
+    table, th, td {
+        border: 1px solid;
+        border-collapse: collapse;
+    }
+</style>
 </body>
 </html>
