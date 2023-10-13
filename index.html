@@ -14,10 +14,20 @@
         <table id="cipherTable" style="margin-top: 2%">
             <thead>
             <tr>
-                <th>Cipher Debug Output</th>
+                <th>Cipher Output</th>
+            </tr>
+            <tr>
+                <td>Текущая строка</td>
+                <td>Новый символ (к)</td>
+                <td>Выходной символ</td>
+                <td>Словарь</td>
             </tr>
             </thead>
             <tbody id="cipherTableBody">
+            </tbody>
+        </table>
+        <table id="cipherTableOutput" style="margin-top: 2%">
+            <tbody id="cipherTableOutputBody">
             </tbody>
         </table>
         <table id="decipherTable" style="margin-top: 2%">
@@ -25,37 +35,71 @@
             <tr>
                 <th>Decipher Debug Output</th>
             </tr>
+            <tr>
+                <td>Входной символ</td>
+                <td>На выход</td>
+                <td>Полная запись</td>
+                <td>частичная запись</td>
+            </tr>
             </thead>
             <tbody id="decipherTableBody">
+            </tbody>
+        </table>
+        <table id="decipherTableOutput" style="margin-top: 2%">
+            <tbody id="decipherTableOutputBody">
             </tbody>
         </table>
     </div>
 </div>
 <script>
-    function addToDebugTable(tableId, output) {
+    function addToCipherTable(tableId, omega, K, output_symbol, dict_entry) {
         const tableBody = document.getElementById(tableId + "Body");
         const newRow = tableBody.insertRow(-1);
-        const cell = newRow.insertCell(0);
-        cell.innerText = output;
+        const cell_omega = newRow.insertCell(0);
+        cell_omega.innerText = omega;
+        const cell_K = newRow.insertCell(1);
+        cell_K.innerText = K;
+        const cell_output_symbol = newRow.insertCell(2);
+        cell_output_symbol.innerText = output_symbol;
+        const cell_dict_entry = newRow.insertCell(3);
+        cell_dict_entry.innerText = dict_entry;
+    }
+    function addToDecipherTable(tableId, symbol_in, symbol_out, full_entry, partial_entry) {
+        const tableBody = document.getElementById(tableId + "Body");
+        const newRow = tableBody.insertRow(-1);
+        const cell_symbol_in = newRow.insertCell(0);
+        cell_symbol_in.innerText = symbol_in;
+        const cell_symbol_out = newRow.insertCell(1);
+        cell_symbol_out.innerText = symbol_out;
+        const cell_full_entry = newRow.insertCell(2);
+        cell_full_entry.innerText = full_entry;
+        const cell_partial_entry = newRow.insertCell(3);
+        cell_partial_entry.innerText = partial_entry;
     }
 
     let asd = [];
+    let lox_asd = [];
 
     function cipher(msg, debug = false) {
             asd = [...new Set(msg)];
+            lox_asd = asd.slice();
             let i = 1;
             let omega = msg[0];
             let res = '';
             let printout = '-';
+            let omega_out = '-';
+            for (const element of asd) {
+                addToCipherTable("cipherTable", element, " ", " ", " ")
+            }
 
             while (i <= msg.length) {
-                let k;
+                let k = '-';
                 if (i < msg.length) {
                     k = msg[i];
                 }
                 let omega_k = omega + k;
-
-                if (omega_k in asd) {
+                omega_out = omega;
+                if (asd.includes(omega_k)) {
                     omega = omega_k;
                 } else {
                     let lox = asd.indexOf(omega);
@@ -67,11 +111,11 @@
                 i += 1;
                 let abc = asd.length - 1
                 if (debug) {
-                    addToDebugTable("cipherTable", omega + " / " + printout + " / " + abc + ": " + omega_k);
+                    addToCipherTable("cipherTable", omega_out, k, printout, abc + ": " + omega_k);
                 }
             }
 
-            addToDebugTable("cipherTable", "Cipher Output: " + res);
+            addToCipherTable("cipherTableOutput", "Cipher Output: ", res, "", "");
             return res;
         }
 
@@ -85,20 +129,24 @@
         let buffer = "";
         let polnaya_zapis = "-";
 
+        for (const element of lox_asd) {
+            addToDecipherTable("decipherTable", " ", " ", lox_asd.indexOf(element) + ": " + element, " ")
+        }
+
         while (i < msgArray.length) {
-            if (k < asd.length) {
-                const letter = asd[k];
+            if (k < lox_asd.length) {
+                const letter = lox_asd[k];
 
                 if (flag !== 0) {
                     polnaya_zapis = buffer + letter;
-                    asd.push(polnaya_zapis);
+                    lox_asd.push(polnaya_zapis);
                 }
                 res += letter;
                 buffer = letter;
-                let abc = asd.length - 10
-                let cba = asd.length - 11
+                let abc = lox_asd.length
+                let cba = lox_asd.length - 1
                 if (debug) {
-                    addToDebugTable("decipherTable", k + " / " + letter + " / " + cba + ": " + polnaya_zapis + " / " + abc + ": " + buffer + "?");
+                    addToDecipherTable("decipherTable", k, letter, cba + ": " + polnaya_zapis, abc + ": " + buffer + "?");
                 }
                 flag = 1;
             }
@@ -108,7 +156,7 @@
             }
         }
 
-        addToDebugTable("decipherTable", "Decipher Output: " + res);
+        addToCipherTable("decipherTableOutput", "Decipher Output: " + res, '', '', "");
     }
 
     function executeCipher() {
@@ -120,7 +168,7 @@
         decipherTableBody.innerHTML = "";
 
         if (msg.length === 0) {
-            addToDebugTable("cipherTable", "Please enter a 'msg' value.");
+            addToCipherTable("cipherTable", "Please enter a 'msg' value.");
         } else {
             const cipherResult = cipher(msg, true); // Set debug to true
             decipher(cipherResult, true); // Decipher and set debug to true
