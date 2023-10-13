@@ -163,9 +163,13 @@
         const msg = document.getElementById("msgInput").value;
         const cipherTableBody = document.getElementById("cipherTableBody");
         cipherTableBody.innerHTML = "";
+        const cipherTableOutputBody = document.getElementById("cipherTableOutputBody");
+        cipherTableOutputBody.innerHTML = "";
 
         const decipherTableBody = document.getElementById("decipherTableBody");
         decipherTableBody.innerHTML = "";
+        const decipherTableOutputBody = document.getElementById("decipherTableOutputBody");
+        decipherTableOutputBody.innerHTML = "";
 
         if (msg.length === 0) {
             addToCipherTable("cipherTable", "Please enter a 'msg' value.");
